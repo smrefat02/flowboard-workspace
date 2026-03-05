@@ -14,6 +14,7 @@ import {
   reorderCards,
   reorderLists,
   updateCard,
+  updateWorkspace,
 } from '../services/trello-api';
 import type { WorkspaceSummary } from '../services/trello-api';
 import { checklistStats, normalizeChecklist } from '../utils/checklist';
@@ -146,6 +147,21 @@ export function useBoard() {
     },
     [workspaces, activeWorkspaceId, loadWorkspaceBoard],
   );
+
+  const renameWorkspace = useCallback(async (workspaceId: string, name: string) => {
+    const trimmedName = name.trim();
+    if (!trimmedName) return;
+
+    try {
+      await loginDemoUser();
+      const updatedWorkspace = await updateWorkspace(workspaceId, { name: trimmedName });
+      setWorkspaces((prev) =>
+        prev.map((workspace) => (workspace.id === workspaceId ? { ...workspace, name: updatedWorkspace.name } : workspace)),
+      );
+    } catch {
+      // no-op
+    }
+  }, []);
 
   const createLaunchBoard = useCallback(async () => {
     if (!activeWorkspaceId) return;
@@ -323,6 +339,7 @@ export function useBoard() {
       addWorkspace,
       selectWorkspace,
       removeWorkspaceOption,
+      renameWorkspace,
       createLaunchBoard,
       saveCard,
       commentCard,
@@ -342,6 +359,7 @@ export function useBoard() {
       addWorkspace,
       selectWorkspace,
       removeWorkspaceOption,
+      renameWorkspace,
       createLaunchBoard,
       saveCard,
       commentCard,

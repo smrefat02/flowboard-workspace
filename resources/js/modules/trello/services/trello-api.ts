@@ -74,6 +74,11 @@ export async function createWorkspace(name: string): Promise<WorkspaceSummary> {
   return data.data as WorkspaceSummary;
 }
 
+export async function updateWorkspace(workspaceId: string, payload: Partial<Pick<WorkspaceSummary, 'name'>>) {
+  const { data } = await api.patch(`/api/workspaces/${workspaceId}`, payload);
+  return data.data as WorkspaceSummary;
+}
+
 export async function fetchBoards(workspaceId: string): Promise<BoardSummary[]> {
   const { data } = await api.get(`/api/workspaces/${workspaceId}/boards`);
   return data.data as BoardSummary[];
