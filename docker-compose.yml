@@ -1,0 +1,38 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/var/www/html
+    environment:
+      APP_ENV: local
+      APP_DEBUG: true
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: trello-codex
+      DB_USERNAME: root
+      DB_PASSWORD: refat123
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: refat123
+      MYSQL_DATABASE: trello-codex
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-prefat123"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - dbdata:/var/lib/mysql
+
+volumes:
+  dbdata:
