@@ -8,6 +8,7 @@ use App\Modules\Trello\Models\Workspace;
 use App\Modules\Trello\Repositories\WorkspaceRepository;
 use App\Modules\Trello\Requests\InviteWorkspaceMemberRequest;
 use App\Modules\Trello\Requests\StoreWorkspaceRequest;
+use App\Modules\Trello\Requests\UpdateWorkspaceRequest;
 use App\Modules\Trello\Resources\WorkspaceResource;
 use App\Modules\Trello\Services\WorkspaceService;
 use Illuminate\Http\JsonResponse;
@@ -44,6 +45,15 @@ class WorkspaceController extends Controller
         $this->authorize('view', $workspace);
 
         return new WorkspaceResource($workspace->load(['owner', 'members']));
+    }
+
+    public function update(UpdateWorkspaceRequest $request, Workspace $workspace): WorkspaceResource
+    {
+        $this->authorize('manage', $workspace);
+
+        $workspace->update($request->validated());
+
+        return new WorkspaceResource($workspace->refresh()->load('owner'));
     }
 
     public function invite(InviteWorkspaceMemberRequest $request, Workspace $workspace): JsonResponse
