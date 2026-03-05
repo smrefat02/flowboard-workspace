@@ -1,0 +1,132 @@
+openapi: 3.1.0
+info:
+  title: Trello Codex API
+  version: 1.0.0
+  description: Trello-style project management APIs built with Laravel.
+servers:
+  - url: http://127.0.0.1:8000/api
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Token
+  schemas:
+    Workspace:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        slug: { type: string }
+    Board:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        workspace_id: { type: string, format: uuid }
+        name: { type: string }
+        visibility: { type: string, enum: [private, workspace, public] }
+security:
+  - bearerAuth: []
+paths:
+  /auth/login:
+    post:
+      summary: Login and create Sanctum token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+                device_name: { type: string }
+      responses:
+        '200':
+          description: Login success
+  /workspaces:
+    get:
+      summary: List my workspaces
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Create workspace
+      responses:
+        '200': { description: OK }
+  /workspaces/{workspace}/boards:
+    get:
+      summary: List boards in workspace
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+  /boards:
+    post:
+      summary: Create board
+      responses:
+        '200': { description: OK }
+  /boards/{board}:
+    get:
+      summary: Board detail with lists/cards
+      parameters:
+        - in: path
+          name: board
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+    patch:
+      summary: Update board
+      responses:
+        '200': { description: OK }
+    delete:
+      summary: Delete board
+      responses:
+        '200': { description: OK }
+  /boards/{board}/members:
+    get:
+      summary: List board members
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Add board member
+      responses:
+        '201': { description: Created }
+  /boards/{board}/lists:
+    post:
+      summary: Create list
+      responses:
+        '200': { description: OK }
+  /boards/{board}/lists/reorder:
+    post:
+      summary: Reorder lists
+      responses:
+        '200': { description: OK }
+  /lists/{list}/cards:
+    post:
+      summary: Create card
+      responses:
+        '200': { description: OK }
+  /cards/{card}:
+    get:
+      summary: Card detail
+      responses:
+        '200': { description: OK }
+    patch:
+      summary: Update card
+      responses:
+        '200': { description: OK }
+    delete:
+      summary: Delete card
+      responses:
+        '200': { description: OK }
+  /cards/reorder:
+    post:
+      summary: Reorder/move cards between lists
+      responses:
+        '200': { description: OK }
