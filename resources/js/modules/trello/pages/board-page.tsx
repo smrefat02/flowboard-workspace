@@ -20,6 +20,7 @@ export function BoardPage() {
     addWorkspace,
     selectWorkspace,
     removeWorkspaceOption,
+    renameWorkspace,
     createLaunchBoard,
     saveCard,
     commentCard,
@@ -50,6 +51,7 @@ export function BoardPage() {
       onSwitchWorkspace={(workspaceId) => void selectWorkspace(workspaceId)}
       onCreateWorkspace={(name) => void addWorkspace(name)}
       onDeleteWorkspace={(workspaceId) => void removeWorkspaceOption(workspaceId)}
+      onRenameWorkspace={(workspaceId, name) => void renameWorkspace(workspaceId, name)}
     >
       {loading || !board ? (
         <div className="rounded-2xl border border-slate-200 bg-white p-8 text-sm text-slate-500">

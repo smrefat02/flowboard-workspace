@@ -10,6 +10,7 @@ interface Props {
   onSwitchWorkspace: (workspaceId: string) => void;
   onCreateWorkspace: (name: string) => void;
   onDeleteWorkspace: (workspaceId: string) => void;
+  onRenameWorkspace: (workspaceId: string, name: string) => void;
 }
 
 export function DashboardLayout({
@@ -19,6 +20,7 @@ export function DashboardLayout({
   onSwitchWorkspace,
   onCreateWorkspace,
   onDeleteWorkspace,
+  onRenameWorkspace,
 }: Props) {
   const onCreateWorkspacePrompt = () => {
     const name = window.prompt('Workspace name');
@@ -26,6 +28,15 @@ export function DashboardLayout({
 
     onCreateWorkspace(name);
   };
+
+  const onRenameWorkspacePrompt = (workspaceId: string, currentName: string) => {
+    const name = window.prompt('Rename workspace', currentName);
+    if (!name || name.trim() === currentName.trim()) return;
+
+    onRenameWorkspace(workspaceId, name);
+  };
+
+  const activeWorkspace = workspaces.find((workspace) => workspace.id === activeWorkspaceId) ?? null;
 
   return (
     <div className="min-h-screen px-3 py-4 md:px-5">
@@ -42,13 +53,24 @@ export function DashboardLayout({
                   }`}
                   variant={activeWorkspaceId === workspace.id ? 'default' : 'ghost'}
                   onClick={() => onSwitchWorkspace(workspace.id)}
+                  onDoubleClick={() => onRenameWorkspacePrompt(workspace.id, workspace.name)}
+                  title="Double-click to rename"
                 >
                   {workspace.name}
                 </Button>
                 <Button
                   size="sm"
+                  variant="outline"
+                  className="h-8 shrink-0 rounded-lg px-2 text-xs font-medium text-slate-600 hover:text-slate-900"
+                  onClick={() => onRenameWorkspacePrompt(workspace.id, workspace.name)}
+                  title="Rename workspace"
+                >
+                  Edit
+                </Button>
+                <Button
+                  size="sm"
                   variant="ghost"
-                  className="h-8 w-8 shrink-0 rounded-lg p-0 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100 hover:text-red-600"
+                  className="h-8 w-8 shrink-0 rounded-lg p-0 text-slate-400 opacity-100 hover:text-red-600"
                   onClick={() => onDeleteWorkspace(workspace.id)}
                   title="Remove from switcher"
                 >
@@ -57,6 +79,15 @@ export function DashboardLayout({
               </div>
             ))}
           </div>
+          {activeWorkspace ? (
+            <Button
+              className="mt-3 h-9 w-full justify-start rounded-xl"
+              variant="outline"
+              onClick={() => onRenameWorkspacePrompt(activeWorkspace.id, activeWorkspace.name)}
+            >
+              Rename Active Workspace
+            </Button>
+          ) : null}
           <Button className="mt-4 h-10 w-full justify-start rounded-xl" variant="outline" onClick={onCreateWorkspacePrompt}>
             <Plus className="mr-2 h-4 w-4" /> New Workspace
           </Button>
