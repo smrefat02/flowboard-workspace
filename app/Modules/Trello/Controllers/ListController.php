@@ -8,10 +8,12 @@ use App\Modules\Trello\Models\Board;
 use App\Modules\Trello\Models\TrelloList;
 use App\Modules\Trello\Requests\ReorderListsRequest;
 use App\Modules\Trello\Requests\StoreListRequest;
+use App\Modules\Trello\Resources\CardResource;
 use App\Modules\Trello\Resources\TrelloListResource;
 use App\Modules\Trello\Services\ActivityService;
 use App\Modules\Trello\Services\ListService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ListController extends Controller
 {
@@ -20,6 +22,17 @@ class ListController extends Controller
         private readonly ActivityService $activities,
     )
     {
+    }
+
+    public function cards(TrelloList $list): AnonymousResourceCollection
+    {
+        $this->authorize('view', $list->board);
+
+        $cards = $list->cards()
+            ->with(['assignees:id,name,email', 'labels'])
+            ->get();
+
+        return CardResource::collection($cards);
     }
 
     public function store(StoreListRequest $request, Board $board): TrelloListResource
