@@ -3,13 +3,13 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        default: 'bg-blue-600 text-white hover:bg-blue-700',
-        outline: 'border border-slate-300 bg-white hover:bg-slate-50',
-        ghost: 'hover:bg-slate-100',
+        default: 'bg-blue-600 text-white shadow-[0_10px_18px_-14px_rgba(37,99,235,0.85)] hover:bg-blue-700',
+        outline: 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50',
+        ghost: 'text-slate-700 hover:bg-slate-100',
       },
       size: {
         default: 'h-9 px-4 py-2',
