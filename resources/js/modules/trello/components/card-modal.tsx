@@ -228,7 +228,7 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
     <DialogRoot open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl">
         {card ? (
-          <div className="flex gap-4">
+          <div className="flex gap-4 dark:text-slate-100">
             {/* Main Content */}
             <div className="flex-1 space-y-5">
               {/* Header with Status */}
@@ -237,26 +237,26 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
                   <select
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
-                    className="h-8 appearance-none rounded-md border border-slate-300 bg-white pl-3 pr-8 text-xs font-medium hover:bg-slate-50"
+                    className="h-8 appearance-none rounded-md border border-slate-300 bg-white pl-3 pr-8 text-xs font-medium text-slate-900 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
                   >
                     <option value="To Do">To Do</option>
                     <option value="In Process">In Process</option>
                     <option value="Done">Done</option>
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center">
-                    <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="h-4 w-4 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
                 </div>
                 <div className="flex flex-1 items-center gap-2">
-                  <button className="rounded-sm p-1 hover:bg-slate-100">
+                  <button className="rounded-sm p-1 hover:bg-slate-100 dark:hover:bg-slate-800">
                     <img src="/placeholder-icon.svg" alt="" className="h-5 w-5" onError={(e) => e.currentTarget.style.display = 'none'} />
                   </button>
-                  <button className="rounded-sm p-1 hover:bg-slate-100">
+                  <button className="rounded-sm p-1 hover:bg-slate-100 dark:hover:bg-slate-800">
                     <MoreHorizontal className="h-5 w-5" />
                   </button>
-                  <button onClick={() => onOpenChange(false)} className="ml-auto rounded-sm p-1 hover:bg-slate-100">
+                  <button onClick={() => onOpenChange(false)} className="ml-auto rounded-sm p-1 hover:bg-slate-100 dark:hover:bg-slate-800">
                     <X className="h-5 w-5" />
                   </button>
                 </div>
@@ -264,7 +264,7 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
 
               <div>
                 <input
-                  className="heading-font w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-2xl font-bold outline-none"
+                  className="heading-font w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-2xl font-bold text-slate-900 outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100"
                   value={title}
                   onChange={(event) => setTitle(event.target.value)}
                 />
@@ -287,7 +287,7 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
               {/* Labels */}
               {card.labels && card.labels.length > 0 && (
                 <div className="space-y-2">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Labels</p>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400">Labels</p>
                   <div className="flex flex-wrap gap-1">
                     {card.labels.map((label) => (
                       <Badge
@@ -304,11 +304,11 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
 
               {/* Dates */}
               <div className="space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Dates</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400">Dates</p>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setDatePickerOpen(true)}
-                    className="flex h-8 items-center gap-2 rounded-md border border-slate-300 bg-white px-3 text-xs hover:bg-slate-50"
+                    className="flex h-8 items-center gap-2 rounded-md border border-slate-300 bg-white px-3 text-xs text-slate-900 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
                   >
                     <CalendarIcon className="h-3 w-3" />
                     {dueDate ? (
@@ -328,9 +328,9 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
 
               {/* Description */}
               <div className="space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Description</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400">Description</p>
                 <textarea
-                  className="min-h-20 w-full rounded-lg border border-slate-300 bg-slate-50 p-3 text-sm outline-none focus:bg-white"
+                  className="min-h-20 w-full rounded-lg border border-slate-300 bg-slate-50 p-3 text-sm text-slate-900 outline-none placeholder:text-slate-500 focus:bg-white dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:bg-slate-800"
                   value={description}
                   onChange={(event) => setDescription(event.target.value)}
                   placeholder="Add a more detailed description..."
@@ -340,10 +340,10 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
               {/* Checklist */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-500">
+                  <span className="text-xs text-slate-500 dark:text-slate-400">
                     {isChecklistSaving ? 'Saving checklist...' : 'Checklist auto-saves'}
                   </span>
-                  <span className="text-xs text-slate-500">
+                  <span className="text-xs text-slate-500 dark:text-slate-400">
                     {checklistCompleted}/{checklistTotal} complete
                   </span>
                 </div>
@@ -357,8 +357,8 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
                     <div key={group.id} className="space-y-2">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <CheckSquare className="h-4 w-4 text-slate-600" />
-                          <p className="text-sm font-semibold text-slate-800">
+                          <CheckSquare className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+                          <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">
                             {group.title} {group.date ? `(${formatDateDisplay(group.date)})` : ''}
                           </p>
                         </div>
@@ -366,7 +366,7 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="h-7 text-xs text-slate-600"
+                            className="h-7 text-xs text-slate-600 dark:text-slate-300"
                             onClick={() => setHideCompletedItems(prev => ({ ...prev, [group.id]: !prev[group.id] }))}
                           >
                             {hideCompletedItems[group.id] ? 'Show' : 'Hide'} checked items
@@ -374,7 +374,7 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="h-7 text-xs text-slate-600"
+                            className="h-7 text-xs text-slate-600 dark:text-slate-300"
                             onClick={() => removeGroup(group.id)}
                           >
                             Delete
@@ -383,8 +383,8 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
                       </div>
                       
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-slate-500">{groupStats.percent}%</span>
-                        <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-200">
+                        <span className="text-xs text-slate-500 dark:text-slate-400">{groupStats.percent}%</span>
+                        <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
                           <div
                             className="h-full rounded-full bg-green-600 transition-all"
                             style={{ width: `${groupStats.percent}%` }}
@@ -394,7 +394,7 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
 
                       <div className="space-y-1">
                         {visibleItems.map((item) => (
-                          <div key={item.id} className="group flex items-center gap-2 rounded p-1 hover:bg-slate-50">
+                          <div key={item.id} className="group flex items-center gap-2 rounded p-1 hover:bg-slate-50 dark:hover:bg-slate-800">
                             <input
                               type="checkbox"
                               checked={item.completed}
@@ -402,8 +402,8 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
                               className="h-4 w-4"
                             />
                             <input
-                              className={`h-8 flex-1 rounded border-0 bg-transparent px-2 text-sm outline-none hover:bg-white hover:border hover:border-slate-300 ${
-                                item.completed ? 'text-slate-400 line-through' : ''
+                              className={`h-8 flex-1 rounded border-0 bg-transparent px-2 text-sm text-slate-800 outline-none hover:bg-white hover:border hover:border-slate-300 dark:text-slate-100 dark:hover:border-slate-600 dark:hover:bg-slate-700 ${
+                                item.completed ? 'text-slate-400 line-through dark:text-slate-500' : ''
                               }`}
                               value={item.text}
                               onChange={(event) => updateChecklistItem(group.id, item.id, event.target.value)}
@@ -421,7 +421,7 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
 
                         <div className="flex gap-2 pt-1">
                           <input
-                            className="h-8 flex-1 rounded-md border border-slate-300 px-3 text-sm"
+                            className="h-8 flex-1 rounded-md border border-slate-300 px-3 text-sm text-slate-900 placeholder:text-slate-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400"
                             placeholder="Add an item"
                             value={pendingItems[group.id] ?? ''}
                             onChange={(event) =>
@@ -441,12 +441,12 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
                 })}
 
                 {/* Add New Checklist Group Form */}
-                <div className="space-y-2 rounded-lg border border-dashed border-slate-300 bg-slate-50 p-3">
-                  <p className="text-xs font-semibold text-slate-600">Add Checklist Group</p>
+                <div className="space-y-2 rounded-lg border border-dashed border-slate-300 bg-slate-50 p-3 dark:border-slate-600 dark:bg-slate-800/70">
+                  <p className="text-xs font-semibold text-slate-600 dark:text-slate-300">Add Checklist Group</p>
                   <div className="flex flex-col gap-2 sm:flex-row">
                     <input
                       ref={checklistInputRef}
-                      className="h-9 flex-1 rounded-md border border-slate-300 bg-white px-3 text-sm"
+                      className="h-9 flex-1 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-500 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-400"
                       placeholder="Group title (e.g., Day 1, Week 1)"
                       value={newGroupTitle}
                       onChange={(event) => setNewGroupTitle(event.target.value)}
@@ -456,7 +456,7 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
                     />
                     <input
                       type="date"
-                      className="h-9 w-full rounded-md border border-slate-300 bg-white px-3 text-sm sm:w-40"
+                      className="h-9 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 sm:w-40"
                       value={newGroupDate}
                       onChange={(event) => setNewGroupDate(event.target.value)}
                     />
@@ -467,11 +467,11 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
                 </div>
 
                 {checklist.length === 0 && (
-                  <p className="text-sm text-slate-500">No checklists yet. Add a checklist group above to get started.</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">No checklists yet. Add a checklist group above to get started.</p>
                 )}
               </div>
 
-              <div className="flex justify-end gap-2 border-t pt-4">
+              <div className="flex justify-end gap-2 border-t pt-4 dark:border-slate-700">
                 <Button variant="outline" onClick={() => onOpenChange(false)}>Close</Button>
                 <Button onClick={save}>Save</Button>
               </div>
@@ -479,7 +479,7 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
 
             {/* Right Sidebar */}
             {showDetails && (
-              <div className="w-80 space-y-4 border-l pl-4">
+              <div className="w-80 space-y-4 border-l pl-4 dark:border-slate-700">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <MessageSquare className="h-4 w-4" />
@@ -499,7 +499,7 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
                   {card.activities && card.activities.length > 0 ? (
                     card.activities.map((activity) => (
                       <div key={activity.id} className="flex gap-2 text-xs">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700">
                           {activity.user?.name?.charAt(0) ?? 'U'}
                         </div>
                         <div>
@@ -507,21 +507,21 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
                             <span className="font-semibold">{activity.user?.name ?? 'User'}</span>{' '}
                             {activity.action}
                           </p>
-                          <p className="text-slate-500">
+                          <p className="text-slate-500 dark:text-slate-400">
                             {format(parse(activity.created_at, "yyyy-MM-dd'T'HH:mm:ss", new Date()), 'd MMM yyyy, HH:mm')}
                           </p>
                         </div>
                       </div>
                     ))
                   ) : (
-                    <p className="text-sm text-slate-500">No activity yet</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">No activity yet</p>
                   )}
                 </div>
 
-                <div className="space-y-2 border-t pt-4">
-                  <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-600">Add Comment</h4>
+                <div className="space-y-2 border-t pt-4 dark:border-slate-700">
+                  <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400">Add Comment</h4>
                   <textarea
-                    className="min-h-20 w-full rounded-lg border border-slate-300 p-2 text-sm"
+                    className="min-h-20 w-full rounded-lg border border-slate-300 p-2 text-sm text-slate-900 placeholder:text-slate-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400"
                     placeholder="Write a comment..."
                     value={comment}
                     onChange={(event) => setComment(event.target.value)}
