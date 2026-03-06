@@ -33,10 +33,16 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const [showDetails, setShowDetails] = useState(true);
   const [hideCompletedItems, setHideCompletedItems] = useState<Record<string, boolean>>({});
+  const [isChecklistSaving, setIsChecklistSaving] = useState(false);
   const checklistInputRef = useRef<HTMLInputElement>(null);
+  const checklistSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastChecklistSnapshotRef = useRef<string>('[]');
+
+  const snapshotChecklist = (groups: ChecklistGroup[]) => JSON.stringify(normalizeChecklist(groups));
 
   useEffect(() => {
     if (!card) return;
+    const normalizedChecklist = normalizeChecklist(card.checklist);
     setTitle(card.title ?? '');
     setDescription(card.description ?? '');
     setStartDate(card.start_date ? card.start_date.slice(0, 10) : '');
@@ -46,12 +52,41 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
     setReminder(card.reminder ?? '');
     setStatus(card.status ?? 'In Process');
     setComment('');
-    setChecklist(normalizeChecklist(card.checklist));
+    setChecklist(normalizedChecklist);
+    lastChecklistSnapshotRef.current = snapshotChecklist(normalizedChecklist);
     setNewGroupTitle('');
     setNewGroupDate('');
     setPendingItems({});
     setHideCompletedItems({});
+    setIsChecklistSaving(false);
   }, [card]);
+
+  useEffect(() => {
+    if (!open || !card) return;
+
+    const nextSnapshot = snapshotChecklist(checklist);
+    if (nextSnapshot === lastChecklistSnapshotRef.current) return;
+
+    if (checklistSaveTimerRef.current) clearTimeout(checklistSaveTimerRef.current);
+
+    setIsChecklistSaving(true);
+    checklistSaveTimerRef.current = setTimeout(() => {
+      void (async () => {
+        try {
+          await onSave(card, { checklist });
+          lastChecklistSnapshotRef.current = nextSnapshot;
+        } finally {
+          setIsChecklistSaving(false);
+        }
+      })();
+    }, 300);
+
+    return () => {
+      if (checklistSaveTimerRef.current) {
+        clearTimeout(checklistSaveTimerRef.current);
+      }
+    };
+  }, [checklist, card, open, onSave]);
 
   const save = async () => {
     if (!card) return;
@@ -304,6 +339,14 @@ export function CardModal({ open, onOpenChange, card, onSave, onAddComment }: Pr
 
               {/* Checklist */}
               <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-500">
+                    {isChecklistSaving ? 'Saving checklist...' : 'Checklist auto-saves'}
+                  </span>
+                  <span className="text-xs text-slate-500">
+                    {checklistCompleted}/{checklistTotal} complete
+                  </span>
+                </div>
                 {checklist.map((group, groupIndex) => {
                   const groupStats = checklistStats([group]);
                   const visibleItems = hideCompletedItems[group.id]
