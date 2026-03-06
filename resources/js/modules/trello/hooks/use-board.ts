@@ -17,7 +17,6 @@ import {
   updateWorkspace,
 } from '../services/trello-api';
 import type { WorkspaceSummary } from '../services/trello-api';
-import { checklistStats, normalizeChecklist } from '../utils/checklist';
 import type { Board, Comment, TrelloCard } from '../types';
 
 const demoBoard: Board = {
@@ -235,35 +234,6 @@ export function useBoard() {
       if (!board) return;
       try {
         await updateCard(card.id, payload);
-
-        const shouldAutoMove = payload.checklist
-          ? checklistStats(normalizeChecklist(payload.checklist)).isComplete
-          : false;
-
-        if (shouldAutoMove) {
-          const doneList = board.lists.find((list) => list.title.trim().toLowerCase() === 'done');
-          const sourceList = board.lists.find((list) => list.cards.some((item) => item.id === card.id));
-
-          if (doneList && sourceList && sourceList.id !== doneList.id) {
-            const cardsByList: Record<string, string[]> = {};
-
-            for (const list of board.lists) {
-              if (list.id === sourceList.id) {
-                cardsByList[list.id] = list.cards.filter((item) => item.id !== card.id).map((item) => item.id);
-                continue;
-              }
-
-              if (list.id === doneList.id) {
-                cardsByList[list.id] = [...list.cards.map((item) => item.id), card.id];
-                continue;
-              }
-
-              cardsByList[list.id] = list.cards.map((item) => item.id);
-            }
-
-            await reorderCards(cardsByList);
-          }
-        }
 
         await loadBoard();
       } catch {
