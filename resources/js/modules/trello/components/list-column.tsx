@@ -52,19 +52,19 @@ function SortableCard({
       {...listeners}
     >
       <Card
-        className={`rounded-2xl border border-slate-200/90 bg-white transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md ${
+        className={`rounded-2xl border border-slate-200/90 bg-white transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-600 ${
           compactMode ? 'p-2.5' : 'p-3'
         } ${
-          isDragging ? 'shadow-lg ring-2 ring-sky-100' : ''
+          isDragging ? 'shadow-lg ring-2 ring-sky-100 dark:ring-sky-900' : ''
         }`}
         onClick={() => onSelectCard(card)}
       >
         <div className="flex items-start justify-between gap-2">
-          <p className="text-sm font-semibold text-slate-900">{card.title}</p>
+          <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{card.title}</p>
           <Button
             size="sm"
             variant="ghost"
-            className="h-6 w-6 rounded-md p-0 text-slate-400 hover:text-red-600"
+            className="h-6 w-6 rounded-md p-0 text-slate-400 hover:text-red-600 dark:text-slate-500 dark:hover:bg-red-950/40 dark:hover:text-red-400"
             onPointerDown={(event) => event.stopPropagation()}
             onClick={(event) => {
               event.stopPropagation();
@@ -108,21 +108,21 @@ export function ListColumn({ list, compactMode, className, style, onSelectCard, 
   return (
     <div
       className={cn(
-        'w-80 shrink-0 rounded-[22px] border border-slate-200/90 bg-white/90 shadow-sm',
+        'w-80 shrink-0 rounded-[22px] border border-slate-200/90 bg-white/90 shadow-sm dark:border-slate-700/90 dark:bg-slate-900/90',
         compactMode ? 'w-72 p-2.5' : 'p-3',
         className,
       )}
       style={style}
     >
-      <div className="mb-3 flex items-center justify-between rounded-xl border border-slate-200/70 bg-slate-50/70 px-2 py-1.5">
+      <div className="mb-3 flex items-center justify-between rounded-xl border border-slate-200/70 bg-slate-50/70 px-2 py-1.5 dark:border-slate-700/70 dark:bg-slate-800/70">
         <div className="flex items-center gap-2">
-          <h3 className="heading-font text-sm font-bold tracking-wide text-slate-800">{list.title}</h3>
+          <h3 className="heading-font text-sm font-bold tracking-wide text-slate-800 dark:text-slate-100">{list.title}</h3>
           <Badge className="rounded-lg bg-slate-900 px-2 text-[11px] text-white">{list.cards.length}</Badge>
         </div>
         <Button
           size="sm"
           variant="ghost"
-          className="h-7 w-7 rounded-lg p-0 text-slate-400 hover:bg-red-50 hover:text-red-600"
+          className="h-7 w-7 rounded-lg p-0 text-slate-400 hover:bg-red-50 hover:text-red-600 dark:text-slate-500 dark:hover:bg-red-950/40 dark:hover:text-red-400"
           onPointerDown={(event) => event.stopPropagation()}
           onClick={(event) => {
             event.stopPropagation();
@@ -133,7 +133,13 @@ export function ListColumn({ list, compactMode, className, style, onSelectCard, 
         </Button>
       </div>
 
-      <div ref={setNodeRef} className={cn('rounded-2xl border border-slate-200/70 bg-slate-50/80', compactMode ? 'space-y-1.5 p-1.5' : 'space-y-2 p-2')}>
+      <div
+        ref={setNodeRef}
+        className={cn(
+          'rounded-2xl border border-slate-200/70 bg-slate-50/80 dark:border-slate-700/70 dark:bg-slate-800/70',
+          compactMode ? 'space-y-1.5 p-1.5' : 'space-y-2 p-2',
+        )}
+      >
         <SortableContext items={list.cards.map((card) => card.id)} strategy={verticalListSortingStrategy}>
           {list.cards.map((card, index) => (
             <SortableCard
@@ -149,9 +155,9 @@ export function ListColumn({ list, compactMode, className, style, onSelectCard, 
         </SortableContext>
 
         {isAddingCard ? (
-          <div className={cn('space-y-2 rounded-xl border border-slate-200 bg-white', compactMode ? 'p-1.5' : 'p-2')}>
+          <div className={cn('space-y-2 rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900', compactMode ? 'p-1.5' : 'p-2')}>
             <input
-              className="h-9 w-full rounded-lg border border-slate-300 px-2 text-sm outline-none focus:border-slate-400"
+              className="h-9 w-full rounded-lg border border-slate-300 px-2 text-sm outline-none focus:border-slate-400 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100"
               placeholder="Card title"
               value={cardTitle}
               onChange={(event) => setCardTitle(event.target.value)}
@@ -185,6 +191,7 @@ export function ListColumn({ list, compactMode, className, style, onSelectCard, 
             variant="ghost"
             className={cn(
               'w-full justify-start rounded-xl border border-dashed border-slate-300 bg-white/70 text-slate-600 hover:bg-white',
+              'dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:bg-slate-800',
               compactMode ? 'h-8 text-xs' : '',
             )}
             onClick={() => setIsAddingCard(true)}

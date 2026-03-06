@@ -88,20 +88,20 @@ export function BoardCanvas({
   };
 
   return (
-    <div className="glass fade-up rounded-[28px] border border-slate-200/80 p-4 shadow-sm md:p-5">
+    <div className="glass fade-up rounded-[28px] border border-slate-200/80 p-4 shadow-sm dark:border-slate-700/80 md:p-5">
       <div className={`mb-5 flex flex-wrap items-center justify-between gap-3 ${compactMode ? 'mb-4' : ''}`}>
         <div className="space-y-0.5">
-          <h2 className="heading-font text-2xl font-bold text-slate-900 md:text-[1.8rem]">{board.name}</h2>
-          <p className="text-sm text-slate-500">{board.description ?? 'Plan, prioritize, and ship.'}</p>
+          <h2 className="heading-font text-2xl font-bold text-slate-900 dark:text-white md:text-[1.8rem]">{board.name}</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400">{board.description ?? 'Plan, prioritize, and ship.'}</p>
         </div>
-        <div className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600">
+        <div className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
           <span className="h-2 w-2 rounded-full bg-emerald-500" />
           {board.lists.length} list{board.lists.length === 1 ? '' : 's'}
         </div>
         {isAddingList ? (
-          <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white p-2 shadow-sm">
+          <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white p-2 shadow-sm dark:border-slate-700 dark:bg-slate-800">
             <input
-              className="h-9 rounded-lg border border-slate-300 bg-white px-3 text-sm outline-none focus:border-slate-400"
+              className="h-9 rounded-lg border border-slate-300 bg-white px-3 text-sm outline-none placeholder:text-slate-400 focus:border-slate-400 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-400"
               placeholder="List title"
               value={newListTitle}
               onChange={(event) => setNewListTitle(event.target.value)}
@@ -119,7 +119,7 @@ export function BoardCanvas({
         ) : (
           <Button
             variant="outline"
-            className="rounded-xl border-slate-200 bg-white text-slate-700 hover:bg-slate-100"
+            className="rounded-xl border-slate-200 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
             onClick={() => setIsAddingList(true)}
           >
             Add List
@@ -128,7 +128,7 @@ export function BoardCanvas({
       </div>
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-        <ScrollArea className={`rounded-2xl border border-slate-200/70 bg-slate-100/45 pb-2 ${compactMode ? 'p-1.5' : 'p-2'}`}>
+        <ScrollArea className={`rounded-2xl border border-slate-200/70 bg-slate-100/45 pb-2 dark:border-slate-700/70 dark:bg-slate-900/40 ${compactMode ? 'p-1.5' : 'p-2'}`}>
           <SortableContext items={board.lists.map((list) => list.id)} strategy={horizontalListSortingStrategy}>
             <div className={`flex pb-3 ${compactMode ? 'gap-3' : 'gap-4'}`}>
               {board.lists.map((list, index) => (
