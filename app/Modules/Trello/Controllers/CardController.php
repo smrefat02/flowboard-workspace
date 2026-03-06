@@ -89,4 +89,58 @@ class CardController extends Controller
 
         return response()->json(['message' => 'Card deleted']);
     }
+
+    public function archive(Card $card): CardResource
+    {
+        $this->authorize('update', $card);
+
+        $card->update(['archived_at' => now()]);
+
+        $this->activities->log($card->list->board, $card, (string) request()->user()?->id, 'card.archived', [
+            'title' => $card->title,
+        ]);
+
+        return new CardResource($card->refresh()->load(['assignees', 'labels']));
+    }
+
+    public function restore(Card $card): CardResource
+    {
+        $this->authorize('update', $card);
+
+        $card->update(['archived_at' => null]);
+
+        $this->activities->log($card->list->board, $card, (string) request()->user()?->id, 'card.restored', [
+            'title' => $card->title,
+        ]);
+
+        return new CardResource($card->refresh()->load(['assignees', 'labels']));
+    }
+
+    public function duplicate(Card $card): CardResource
+    {
+        $this->authorize('update', $card);
+
+        $list = $card->list;
+        $position = $list->allCards()->count();
+
+        $newCard = $list->allCards()->create([
+            'creator_id' => request()->user()?->id,
+            'title' => $card->title . ' (copy)',
+            'description' => $card->description,
+            'due_date' => $card->due_date,
+            'checklist' => $card->checklist,
+            'position' => $position,
+        ]);
+
+        if ($card->labels->isNotEmpty()) {
+            $newCard->labels()->sync($card->labels->pluck('id'));
+        }
+
+        $this->activities->log($card->list->board, $newCard, (string) request()->user()?->id, 'card.duplicated', [
+            'original_id' => $card->id,
+            'title' => $newCard->title,
+        ]);
+
+        return new CardResource($newCard->load(['assignees', 'labels']));
+    }
 }
