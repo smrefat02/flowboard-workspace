@@ -10,6 +10,7 @@ import { ListColumn } from './list-column';
 
 interface Props {
   board: Board;
+  compactMode: boolean;
   onBoardChange: (board: Board) => void;
   onSelectCard: (card: TrelloCard) => void;
   onCreateList: (title: string) => void;
@@ -30,6 +31,7 @@ function SortableList({ listId, children }: { listId: string; children: ReactNod
 
 export function BoardCanvas({
   board,
+  compactMode,
   onBoardChange,
   onSelectCard,
   onCreateList,
@@ -86,16 +88,20 @@ export function BoardCanvas({
   };
 
   return (
-    <div className="glass fade-up rounded-3xl border border-slate-200/80 p-4 shadow-sm md:p-5">
-      <div className="mb-4 flex items-center justify-between">
-        <div>
-          <h2 className="heading-font text-2xl font-bold text-slate-900">{board.name}</h2>
+    <div className="glass fade-up rounded-[28px] border border-slate-200/80 p-4 shadow-sm md:p-5">
+      <div className={`mb-5 flex flex-wrap items-center justify-between gap-3 ${compactMode ? 'mb-4' : ''}`}>
+        <div className="space-y-0.5">
+          <h2 className="heading-font text-2xl font-bold text-slate-900 md:text-[1.8rem]">{board.name}</h2>
           <p className="text-sm text-slate-500">{board.description ?? 'Plan, prioritize, and ship.'}</p>
         </div>
+        <div className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600">
+          <span className="h-2 w-2 rounded-full bg-emerald-500" />
+          {board.lists.length} list{board.lists.length === 1 ? '' : 's'}
+        </div>
         {isAddingList ? (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white p-2 shadow-sm">
             <input
-              className="h-9 rounded-xl border border-slate-300 bg-white px-3 text-sm outline-none"
+              className="h-9 rounded-lg border border-slate-300 bg-white px-3 text-sm outline-none focus:border-slate-400"
               placeholder="List title"
               value={newListTitle}
               onChange={(event) => setNewListTitle(event.target.value)}
@@ -107,21 +113,30 @@ export function BoardCanvas({
                 }
               }}
             />
-            <Button className="rounded-xl" onClick={addList}>Save</Button>
-            <Button variant="ghost" className="rounded-xl" onClick={() => setIsAddingList(false)}>Cancel</Button>
+            <Button className="rounded-lg" onClick={addList}>Save</Button>
+            <Button variant="ghost" className="rounded-lg" onClick={() => setIsAddingList(false)}>Cancel</Button>
           </div>
         ) : (
-          <Button variant="outline" className="rounded-xl" onClick={() => setIsAddingList(true)}>Add List</Button>
+          <Button
+            variant="outline"
+            className="rounded-xl border-slate-200 bg-white text-slate-700 hover:bg-slate-100"
+            onClick={() => setIsAddingList(true)}
+          >
+            Add List
+          </Button>
         )}
       </div>
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-        <ScrollArea className="pb-2">
+        <ScrollArea className={`rounded-2xl border border-slate-200/70 bg-slate-100/45 pb-2 ${compactMode ? 'p-1.5' : 'p-2'}`}>
           <SortableContext items={board.lists.map((list) => list.id)} strategy={horizontalListSortingStrategy}>
-            <div className="flex gap-4 pb-3">
-              {board.lists.map((list) => (
+            <div className={`flex pb-3 ${compactMode ? 'gap-3' : 'gap-4'}`}>
+              {board.lists.map((list, index) => (
                 <SortableList key={list.id} listId={list.id}>
                   <ListColumn
+                    compactMode={compactMode}
+                    className="list-reveal"
+                    style={{ animationDelay: `${index * 55}ms` }}
                     list={list}
                     onSelectCard={onSelectCard}
                     onDeleteList={onDeleteList}
