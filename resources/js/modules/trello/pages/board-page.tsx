@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CardModal } from '../components/card-modal';
 import { BoardCanvas } from '../components/board-canvas';
@@ -28,6 +28,19 @@ export function BoardPage() {
   } = useBoard();
   const [selectedCard, setSelectedCard] = useState<TrelloCard | null>(null);
   const [compactMode, setCompactMode] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof window === 'undefined') return 'light';
+
+    const savedTheme = window.localStorage.getItem('flowboard-theme');
+    if (savedTheme === 'dark' || savedTheme === 'light') return savedTheme;
+
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    window.localStorage.setItem('flowboard-theme', theme);
+  }, [theme]);
 
   const onBoardChange = (nextBoard: NonNullable<typeof board>) => {
     setBoard(nextBoard);
@@ -49,7 +62,9 @@ export function BoardPage() {
     <DashboardLayout
       workspaces={workspaces}
       activeWorkspaceId={activeWorkspaceId}
+      theme={theme}
       compactMode={compactMode}
+      onToggleTheme={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
       onToggleCompactMode={() => setCompactMode((value) => !value)}
       onSwitchWorkspace={(workspaceId) => void selectWorkspace(workspaceId)}
       onCreateWorkspace={(name) => void addWorkspace(name)}
@@ -57,7 +72,7 @@ export function BoardPage() {
       onRenameWorkspace={(workspaceId, name) => void renameWorkspace(workspaceId, name)}
     >
       {loading || !board ? (
-        <div className="glass rounded-3xl border border-slate-200 bg-white/90 p-8 text-sm text-slate-500">
+        <div className="glass rounded-3xl border border-slate-200 bg-white/90 p-8 text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-900/85 dark:text-slate-300">
           {loading ? (
             'Loading board...'
           ) : (
