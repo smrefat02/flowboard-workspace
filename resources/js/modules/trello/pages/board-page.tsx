@@ -27,6 +27,7 @@ export function BoardPage() {
     persistReorder,
   } = useBoard();
   const [selectedCard, setSelectedCard] = useState<TrelloCard | null>(null);
+  const [compactMode, setCompactMode] = useState(false);
 
   const onBoardChange = (nextBoard: NonNullable<typeof board>) => {
     setBoard(nextBoard);
@@ -48,13 +49,15 @@ export function BoardPage() {
     <DashboardLayout
       workspaces={workspaces}
       activeWorkspaceId={activeWorkspaceId}
+      compactMode={compactMode}
+      onToggleCompactMode={() => setCompactMode((value) => !value)}
       onSwitchWorkspace={(workspaceId) => void selectWorkspace(workspaceId)}
       onCreateWorkspace={(name) => void addWorkspace(name)}
       onDeleteWorkspace={(workspaceId) => void removeWorkspaceOption(workspaceId)}
       onRenameWorkspace={(workspaceId, name) => void renameWorkspace(workspaceId, name)}
     >
       {loading || !board ? (
-        <div className="rounded-2xl border border-slate-200 bg-white p-8 text-sm text-slate-500">
+        <div className="glass rounded-3xl border border-slate-200 bg-white/90 p-8 text-sm text-slate-500">
           {loading ? (
             'Loading board...'
           ) : (
@@ -69,6 +72,7 @@ export function BoardPage() {
       ) : (
         <BoardCanvas
           board={board}
+          compactMode={compactMode}
           onBoardChange={onBoardChange}
           onSelectCard={setSelectedCard}
           onCreateList={(title) => void addList(title)}
