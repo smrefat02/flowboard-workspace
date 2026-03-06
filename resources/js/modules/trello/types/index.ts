@@ -42,13 +42,18 @@ export interface TrelloCard {
   id: string;
   title: string;
   description?: string | null;
+  start_date?: string | null;
   due_date?: string | null;
+  due_time?: string | null;
+  recurring?: 'never' | 'daily' | 'weekly' | 'monthly' | 'yearly';
+  reminder?: string | null;
   checklist?: ChecklistGroup[];
   position: number;
   labels: Label[];
   assignees: Member[];
   comments?: Comment[];
   activities?: Activity[];
+  status?: string;
 }
 
 export interface TrelloList {
