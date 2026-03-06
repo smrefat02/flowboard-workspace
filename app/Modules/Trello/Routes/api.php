@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\UserSearchController;
+use App\Modules\Trello\Controllers\BoardActivityController;
 use App\Modules\Trello\Controllers\BoardController;
 use App\Modules\Trello\Controllers\BoardMemberController;
 use App\Modules\Trello\Controllers\AttachmentController;
@@ -11,17 +13,21 @@ use App\Modules\Trello\Controllers\WorkspaceController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function (): void {
+    Route::get('/users/search', UserSearchController::class);
+
     Route::get('/workspaces', [WorkspaceController::class, 'index']);
     Route::post('/workspaces', [WorkspaceController::class, 'store']);
     Route::get('/workspaces/{workspace}', [WorkspaceController::class, 'show']);
     Route::patch('/workspaces/{workspace}', [WorkspaceController::class, 'update']);
     Route::post('/workspaces/{workspace}/invite', [WorkspaceController::class, 'invite']);
+    Route::delete('/workspaces/{workspace}/members/{user}', [WorkspaceController::class, 'removeMember']);
 
     Route::get('/workspaces/{workspace}/boards', [BoardController::class, 'index']);
     Route::post('/boards', [BoardController::class, 'store']);
     Route::get('/boards/{board}', [BoardController::class, 'show']);
     Route::patch('/boards/{board}', [BoardController::class, 'update']);
     Route::delete('/boards/{board}', [BoardController::class, 'destroy']);
+    Route::get('/boards/{board}/activities', BoardActivityController::class);
     Route::get('/boards/{board}/members', [BoardMemberController::class, 'index']);
     Route::post('/boards/{board}/members', [BoardMemberController::class, 'store']);
     Route::delete('/boards/{board}/members/{user}', [BoardMemberController::class, 'destroy']);
@@ -30,12 +36,16 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::patch('/lists/{list}', [ListController::class, 'update']);
     Route::post('/boards/{board}/lists/reorder', [ListController::class, 'reorder']);
     Route::delete('/lists/{list}', [ListController::class, 'destroy']);
+    Route::get('/lists/{list}/cards', [ListController::class, 'cards']);
 
     Route::post('/lists/{list}/cards', [CardController::class, 'store']);
     Route::get('/cards/{card}', [CardController::class, 'show']);
     Route::patch('/cards/{card}', [CardController::class, 'update']);
     Route::post('/cards/reorder', [CardController::class, 'reorder']);
     Route::delete('/cards/{card}', [CardController::class, 'destroy']);
+    Route::post('/cards/{card}/archive', [CardController::class, 'archive']);
+    Route::post('/cards/{card}/restore', [CardController::class, 'restore']);
+    Route::post('/cards/{card}/duplicate', [CardController::class, 'duplicate']);
 
     Route::post('/cards/{card}/comments', [CardCommentController::class, 'store']);
     Route::delete('/cards/{card}/comments/{comment}', [CardCommentController::class, 'destroy']);
