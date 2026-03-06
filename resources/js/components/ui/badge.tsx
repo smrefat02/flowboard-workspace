@@ -4,7 +4,10 @@ import { cn } from '@/lib/utils';
 export function Badge({ className, ...props }: HTMLAttributes<HTMLSpanElement>) {
   return (
     <span
-      className={cn('inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700', className)}
+      className={cn(
+        'inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700 dark:bg-slate-700/80 dark:text-slate-100',
+        className,
+      )}
       {...props}
     />
   );
