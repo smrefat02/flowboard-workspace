@@ -10,7 +10,7 @@
     @viteReactRefresh
     @vite(['resources/css/app.css', 'resources/js/app.tsx'])
   </head>
-  <body class="min-h-screen bg-slate-100 text-slate-900 antialiased">
+  <body class="min-h-screen antialiased">
     <div id="app"></div>
   </body>
 </html>

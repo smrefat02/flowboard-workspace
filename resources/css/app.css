@@ -1,9 +1,11 @@
 @import "tailwindcss";
 @source "../views";
 @source "../js";
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --bg: #ecf2f9;
+  --glass-bg: #ffffff;
   --surface: #ffffff;
   --surface-soft: #f4f8fc;
   --text: #0f1d2f;
@@ -22,12 +24,37 @@ body {
     var(--bg);
   color: var(--text);
   min-height: 100vh;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dark {
+  --bg: #040a16;
+  --glass-bg: #0f172a;
+  --surface: #0f172a;
+  --surface-soft: #111b30;
+  --text: #e5edf8;
+  --muted: #94a3b8;
+  --border: #334155;
+  --brand: #7aa2f7;
+  --brand-soft: #1e293b;
+}
+
+.dark body {
+  background: radial-gradient(circle at 88% 10%, #1d2f4e 0%, transparent 38%),
+    radial-gradient(circle at 5% 30%, #173934 0%, transparent 34%),
+    linear-gradient(180deg, #0a1222 0%, #070f1d 60%, #050b16 100%),
+    var(--bg);
+  color: var(--text);
 }
 
 .glass {
-  background: color-mix(in srgb, white 84%, transparent);
+  background: color-mix(in srgb, var(--glass-bg) 84%, transparent);
   backdrop-filter: blur(16px);
   box-shadow: 0 24px 46px -34px rgba(22, 55, 108, 0.52);
+}
+
+.dark .glass {
+  box-shadow: 0 20px 42px -30px rgba(2, 8, 23, 0.9);
 }
 
 .scrollbar-thin {
