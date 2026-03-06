@@ -16,6 +16,7 @@ class CardResource extends JsonResource
             'due_date' => $this->due_date,
             'checklist' => $this->checklist ?? [],
             'position' => $this->position,
+            'archived_at' => $this->archived_at,
             'assignees' => UserTinyResource::collection($this->whenLoaded('assignees')),
             'labels' => $this->whenLoaded('labels', fn () => $this->labels->map(fn ($label) => [
                 'id' => $label->id,
@@ -27,6 +28,7 @@ class CardResource extends JsonResource
                 'id' => $attachment->id,
                 'file_name' => $attachment->file_name,
                 'file_path' => $attachment->file_path,
+                'url' => \Illuminate\Support\Facades\Storage::disk('public')->url($attachment->file_path),
                 'mime_type' => $attachment->mime_type,
                 'size_bytes' => $attachment->size_bytes,
             ])),

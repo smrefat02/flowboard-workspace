@@ -26,6 +26,11 @@ class TrelloList extends Model
 
     public function cards(): HasMany
     {
+        return $this->hasMany(Card::class, 'list_id')->whereNull('archived_at')->orderBy('position');
+    }
+
+    public function allCards(): HasMany
+    {
         return $this->hasMany(Card::class, 'list_id')->orderBy('position');
     }
 }
