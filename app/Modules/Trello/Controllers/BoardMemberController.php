@@ -23,7 +23,7 @@ class BoardMemberController extends Controller
         return UserTinyResource::collection($board->members()->get());
     }
 
-    public function store(InviteBoardMemberRequest $request, Board $board): JsonResponse
+    public function store(InviteBoardMemberRequest $request, Board $board): JsonResponse 
     {
         $this->authorize('update', $board);
 
