@@ -81,7 +81,7 @@ export function Calendar({ selected, onSelect, month: controlledMonth, onMonthCh
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
-        <div className="text-sm font-semibold">
+        <div className="text-sm font-semibold dark:text-slate-100">
           {format(month, 'MMMM yyyy')}
         </div>
         <Button
@@ -110,7 +110,7 @@ export function Calendar({ selected, onSelect, month: controlledMonth, onMonthCh
             {weekDays.map((weekDay) => (
               <th
                 key={weekDay}
-                className="p-0 pb-2 text-center text-xs font-medium text-slate-500"
+                className="p-0 pb-2 text-center text-xs font-medium text-slate-500 dark:text-slate-400"
               >
                 {weekDay}
               </th>
@@ -133,10 +133,10 @@ export function Calendar({ selected, onSelect, month: controlledMonth, onMonthCh
                       onClick={() => onSelect?.(day)}
                       className={cn(
                         'h-9 w-9 p-0 text-sm font-normal',
-                        !isCurrentMonth && 'text-slate-400',
+                        !isCurrentMonth && 'text-slate-400 dark:text-slate-600',
                         isSelected && 'bg-blue-600 text-white hover:bg-blue-700 hover:text-white',
-                        !isSelected && isToday && 'bg-slate-100',
-                        !isSelected && 'hover:bg-slate-100',
+                        !isSelected && isToday && 'bg-slate-100 dark:bg-slate-700',
+                        !isSelected && 'hover:bg-slate-100 dark:hover:bg-slate-700',
                       )}
                     >
                       {format(day, 'd')}
