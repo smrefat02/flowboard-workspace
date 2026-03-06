@@ -67,4 +67,17 @@ class WorkspaceController extends Controller
 
         return response()->json(['message' => 'Member invited']);
     }
+
+    public function removeMember(Workspace $workspace, string $userId): JsonResponse
+    {
+        $this->authorize('manage', $workspace);
+
+        if ($workspace->owner_id === $userId) {
+            return response()->json(['message' => 'Cannot remove the workspace owner'], 422);
+        }
+
+        $workspace->memberships()->where('user_id', $userId)->delete();
+
+        return response()->json(['message' => 'Member removed']);
+    }
 }
